@@ -125,7 +125,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         const typeMap = {};
         const objArray = [];
 
-        data.expendDataObjArray.forEach(entry => {
+        data.expendDataObjectArray.forEach(entry => {
             const date = new Date(entry.date);
             const amount = Number(entry.amount || 0);
             const type = entry.type;

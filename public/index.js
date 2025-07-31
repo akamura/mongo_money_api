@@ -126,6 +126,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         const objArray = [];
 
         data.expendDataObjectArray.forEach(entry => {
+            console.log(entry);
             const date = new Date(entry.date);
             const amount = Number(entry.amount || 0);
             const type = entry.type;
@@ -178,7 +179,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
 
         let newArray = [];
         let colorArray = [];
-        for(let obj of data.expendDataObjArray) {//色とタイプが固定するように配列を作る
+        for(let obj of data.expendDataObjectArray.expendDataObjArray) {//色とタイプが固定するように配列を作る
             console.log(obj);
             colorArray.push(obj.color);
             newArray.push([obj.type,obj.price,obj.color]);

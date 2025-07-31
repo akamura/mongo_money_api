@@ -44,7 +44,9 @@ app.post("/", async (req, res) => {
 app.get("/relay", async (req, res) => {
     try {
         const expenses = await Expense.find().sort({date: -1}).limit(100);
-        res.json(expenses);
+        res.json({
+            expendDataObjectArray: expenses
+        });
     } catch (err) {
         console.error("取得エラー：", err);
         res.status(500).send("取得失敗");

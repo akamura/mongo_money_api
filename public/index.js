@@ -162,7 +162,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         //テーブルに支出の値を記入する
         let typeArray = ["investment","waste_expense","necessities","eating_out","delivery","book","teaching_material","convenience","food","other"];
         let i = 0;
-        for(let key in data) {
+        for(let key in data.expendDataObjectArray) {
 
             document.getElementById(`${typeArray[i]}`).textContent = data.expendType[key]
             i++;

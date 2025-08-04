@@ -119,6 +119,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
     .then(res => res.json())
     .then(data => {
         console.log("受け取りデータ：", data);
+        console.log("受け取りデータの型：", typeof(data) );
         // console.log("受け取りデータ：", data.expendType);
         // console.log("受け取りデータ：", data.expendDataObjArray);
 
@@ -192,7 +193,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         pieObjArray(data.expendDataObjArray);
 
     })
-    .catch(err => console.error("取得失敗：",err,`${data}`));
+    .catch(err => console.error("取得失敗：",err));
 }
 
 function pieObjArray (objArray) {

@@ -6,7 +6,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const path = require("path");
-app.use(express.static(path.join(__dirname,"public")));
 
 require("dotenv").config();
 const mongoURL = process.env.MONGO_URI;
@@ -14,6 +13,7 @@ const mongoURL = process.env.MONGO_URI;
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname,"public")));
 
 //MongoDB
 

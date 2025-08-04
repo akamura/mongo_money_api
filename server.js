@@ -22,7 +22,7 @@ mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
     .then(() => console.log("MongoDBに接続成功"))
     .catch(err => console.error("MongoDB接続失敗:",err));
 
-//スキーマとモデルの定義
+//スキーマとモデルの定義 ！！！ここで保存される形を定義している！！！
 const expenseSchema = new mongoose.Schema({
     date: {type: Date, default: Date.now },
     type: String,
@@ -33,14 +33,16 @@ const Expense = mongoose.model("Expense", expenseSchema);
 //データ受け取り・保存
 app.post("/", async (req, res) => {
     try {
-        const { type, expend} = req.body;
+        const { type, expend} = req.body;//type expendを分割代入
         // console.log(req);
         console.log(req.body);
         const newExpense = new Expense({ type, amount: expend});
+        console.log(newExpense);
         await newExpense.save();
         res.send("保存成功");
     } catch (err) {
         console.error("保存エラー：", err);
+        console.error("保存エラー：", req.body);
         res.status(500).send("保存失敗");
     }
 });

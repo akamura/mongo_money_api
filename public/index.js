@@ -123,7 +123,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
     .then(res => res.json())
     .then(data => {
         console.log("受け取りデータ：", data);
-        console.log("受け取りデータの型：", typeof(data) );
+        console.log("受け取りデータの型：", data.expendDataObjectArray);
         // console.log("受け取りデータ：", data.expendType);
         // console.log("受け取りデータ：", data.expendDataObjArray);
 
@@ -133,9 +133,9 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         const typeMap = {};
         const objArray = [];
 
-        data.forEach(entry => {
-            const date = new Date(entry.date);
-            const amount = Number(entry.amount || 0);
+        data.expendDataObjectArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
+            const date = new Date(entry.timeStamp);
+            const amount = Number(entry.expend || 0);
             const type = entry.type;
             
             if(!typeMap[type]) typeMap[type] = 0;
@@ -156,6 +156,8 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
             
         });
 
+        console.log(objArray);
+
         //時給換算の計算
 
         hourlyExpend = totalToday / 24;
@@ -170,23 +172,23 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         //テーブルに支出の値を記入する
         let typeArray = ["investment","waste_expense","necessities","eating_out","delivery","book","teaching_material","convenience","food","other"];
         let i = 0;
-        for(let key in data) {
+        for(let key in data.expendDataObjectArray) {
 
-            document.getElementById(`${typeArray[i]}`).textContent = data.expendType[key]
+            document.getElementById(`${typeArray[i]}`).textContent = data.expendDataObjectArray[key]
             i++;
         }
         
         let expendArray = [];
         let count = 0;
-        for(let expend in data.expendType){
+        for(let expend in data.expendDataObjectArray){
             // console.log(data.expendType[expend]);
-            expendArray.push(data.expendType[expend]);
+            expendArray.push(data.expendDataObjectArray[expend]);
             count++
         };
 
         let newArray = [];
         let colorArray = [];
-        for(let obj of data.expendDataObjArray) {//色とタイプが固定するように配列を作る
+        for(let obj of data.expendDataObjectArray) {//色とタイプが固定するように配列を作る
             console.log(obj);
             colorArray.push(obj.color);
             newArray.push([obj.type,obj.price,obj.color]);
@@ -194,7 +196,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         console.log(colorArray);
         console.log(newArray);
         // pie(expendArray);
-        pieObjArray(data.expendDataObjArray);
+        pieObjArray(data.expendDataObjectArray);
 
     })
     .catch(err => console.error("取得失敗：",err));

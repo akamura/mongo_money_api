@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+const path = require("path");
+app.use(express.static(path.join(__dirname,"public")));
+
 require("dotenv").config();
 const mongoURL = process.env.MONGO_URI;
 

@@ -97,6 +97,7 @@ document.getElementById("send_income").addEventListener("click" ,(e) => {
 });
 
 function send (data) {  //ポート8001にデータを送信する
+    console.log(`関数send内のdata:${data}`)
     return fetch(`${BASE_URL}/`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -125,8 +126,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         const typeMap = {};
         const objArray = [];
 
-        data.expendDataObjectArray.forEach(entry => {
-            console.log(entry);
+        data.forEach(entry => {
             const date = new Date(entry.date);
             const amount = Number(entry.amount || 0);
             const type = entry.type;
@@ -163,7 +163,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         //テーブルに支出の値を記入する
         let typeArray = ["investment","waste_expense","necessities","eating_out","delivery","book","teaching_material","convenience","food","other"];
         let i = 0;
-        for(let key in data.expendDataObjectArray) {
+        for(let key in data) {
 
             document.getElementById(`${typeArray[i]}`).textContent = data.expendType[key]
             i++;
@@ -179,7 +179,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
 
         let newArray = [];
         let colorArray = [];
-        for(let obj of data.expendDataObjectArray.expendDataObjArray) {//色とタイプが固定するように配列を作る
+        for(let obj of data.expendDataObjArray) {//色とタイプが固定するように配列を作る
             console.log(obj);
             colorArray.push(obj.color);
             newArray.push([obj.type,obj.price,obj.color]);

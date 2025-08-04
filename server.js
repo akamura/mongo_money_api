@@ -31,6 +31,8 @@ const Expense = mongoose.model("Expense", expenseSchema);
 app.post("/", async (req, res) => {
     try {
         const { type, expend} = req.body;
+        // console.log(req);
+        console.log(req.body);
         const newExpense = new Expense({ type, amount: expend});
         await newExpense.save();
         res.send("保存成功");

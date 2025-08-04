@@ -45,6 +45,7 @@ const month = now.getMonth()+1;
 const weeks = now.getDay();
 const week = ["日","月","火","水","木","金","土"][weeks];
 const day = now.getDate();
+const justNow = new Date(now.getTime());
 
 document.getElementById("nowMonth").textContent = month;
 document.getElementById("nowDate").textContent = day;
@@ -54,6 +55,8 @@ document.getElementById("table_month_span").textContent = month;
 console.log(weeks);
 console.log(week);
 console.log(day);
+console.log(justNow);
+console.log(justNow.getMonth());
 
 
 //送信ボタンを押すと直近の買い物の金額を取得
@@ -71,6 +74,7 @@ send_expend.addEventListener("click",(e)=>{
     console.log(typeOfExpenditure);
 
     expendData = {
+        timeStamp : justNow,
         mode : "expend",
         expend : now_expend,
         type : typeOfExpenditure,

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 //MongoDB
 
 
-mongoose.connect(mongoURL, { useNewUrlParser:true, useUnifiedTopology:true})
+mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
     .then(() => console.log("MongoDBに接続成功"))
     .catch(err => console.error("MongoDB接続失敗:",err));
 

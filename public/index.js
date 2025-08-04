@@ -66,13 +66,15 @@ send_expend.addEventListener("click",(e)=>{
     //押すたびに値を変えるのならイベント内で定義すること
     const now_expend = document.getElementById("now_expenditure").value;//出費額
     const typeOfExpenditure = document.getElementById("type_of_expenditure").value;//出費のタイプ
+    const remark = document.getElementById("remark").value;//備考欄の取得
     console.log(now_expend);
     console.log(typeOfExpenditure);
 
     expendData = {
         mode : "expend",
         expend : now_expend,
-        type : typeOfExpenditure
+        type : typeOfExpenditure,
+        remark : remark
     }
 
     console.log(expendData);
@@ -190,7 +192,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         pieObjArray(data.expendDataObjArray);
 
     })
-    .catch(err => console.error("取得失敗：",err));
+    .catch(err => console.error("取得失敗：",err,`${data}`));
 }
 
 function pieObjArray (objArray) {

@@ -27,6 +27,7 @@ mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
 const expenseSchema = new mongoose.Schema({
     date: {type: Date, default: Date.now },
     expend : Number,
+    mode : String,
     type: String,
     remark: String,
     timeStamp: Date
@@ -36,17 +37,18 @@ const Expense = mongoose.model("Expense", expenseSchema);
 //データ受け取り・保存
 app.post("/", async (req, res) => {
     try {
-        const { timeStamp, expend, type, remark} = req.body;//type expendを分割代入
+        const { timeStamp, mode, expend, type, remark} = req.body;//type expendを分割代入
         // console.log(req);
         console.log(req.body);
         const newExpense = new Expense({
             date,
+            mode,
             timeStamp,
             expend,
             type, 
             remark, 
         });//mongoDBに保存するために、専用のオブジェクトを作っている
-        console.log(newExpense);
+        console.log(`newExpense : ${newExpense}`);
         await newExpense.save();
         res.send("保存成功");
     } catch (err) {

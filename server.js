@@ -1,11 +1,12 @@
 "use strict";
-
+//モジュールの呼び出しと、インスタンス化
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const path = require("path");
+const { timeStamp } = require("console");
 
 require("dotenv").config();
 const mongoURL = process.env.MONGO_URI;
@@ -25,18 +26,26 @@ mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
 //スキーマとモデルの定義 ！！！ここで保存される形を定義している！！！
 const expenseSchema = new mongoose.Schema({
     date: {type: Date, default: Date.now },
+    expend : Number,
     type: String,
-    amount: Number
+    remark: String,
+    timeStamp: Date
 });
 const Expense = mongoose.model("Expense", expenseSchema);
 
 //データ受け取り・保存
 app.post("/", async (req, res) => {
     try {
-        const { type, expend} = req.body;//type expendを分割代入
+        const { timeStamp, expend, type, remark} = req.body;//type expendを分割代入
         // console.log(req);
         console.log(req.body);
-        const newExpense = new Expense({ type, amount: expend});
+        const newExpense = new Expense({
+            date,
+            timeStamp,
+            expend,
+            type, 
+            remark, 
+        });//mongoDBに保存するために、専用のオブジェクトを作っている
         console.log(newExpense);
         await newExpense.save();
         res.send("保存成功");

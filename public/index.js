@@ -135,7 +135,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
 
         const dataObjArray = data.expendDataObjectArray;
 
-        console.log(`dataObjArray: ${dataObjArray}`);
+        console.log("dataObjArray : ", dataObjArray);
 
         dataObjArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
             const date = new Date(entry.timeStamp);

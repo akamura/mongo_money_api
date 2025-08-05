@@ -41,7 +41,7 @@ app.post("/", async (req, res) => {
         // console.log(req);
         console.log(req.body);
         const newExpense = new Expense({
-            date,
+            // date,
             mode,
             timeStamp,
             expend,

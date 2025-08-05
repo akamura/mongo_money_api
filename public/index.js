@@ -123,7 +123,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
     .then(res => res.json())
     .then(data => {
         console.log("受け取りデータ：", data);
-        console.log("受け取りデータの型：", data.expendDataObjectArray);
+        console.log("受け取りデータ：", data.expendDataObjectArray);
         // console.log("受け取りデータ：", data.expendType);
         // console.log("受け取りデータ：", data.expendDataObjArray);
 
@@ -133,7 +133,11 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         const typeMap = {};
         const objArray = [];
 
-        data.expendDataObjectArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
+        const dataObjArray = data.expendDataObjectArray;
+
+        console.log(`dataObjArray: ${dataObjArray}`);
+
+        dataObjArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
             const date = new Date(entry.timeStamp);
             const amount = Number(entry.expend || 0);
             const type = entry.type;
@@ -174,7 +178,7 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         let i = 0;
         for(let key in data.expendDataObjectArray) {
 
-            document.getElementById(`${typeArray[i]}`).textContent = data.expendDataObjectArray[key]
+            document.getElementById(`${typeArray[i]}`).textContent = data.expendDataObjectArray.type[key]
             i++;
         }
         

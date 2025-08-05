@@ -135,12 +135,13 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
 
         const dataObjArray = data.expendDataObjectArray;
 
-        console.log("dataObjArray : ", dataObjArray);
-        dataObjArray.forEach((item) => {
-            console.log(item);
-        })
+        // console.log("dataObjArray : ", dataObjArray);
+        // dataObjArray.forEach((item) => {
+        //     console.log(item);
+        // })
 
         dataObjArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
+            console.log(entry);
             const date = new Date(entry.timeStamp);
             const amount = Number(entry.expend || 0);
             const type = entry.type;
@@ -179,15 +180,20 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         //テーブルに支出の値を記入する
         let typeArray = ["investment","waste_expense","necessities","eating_out","delivery","book","teaching_material","convenience","food","other"];
         let i = 0;
-        for(let key in data.expendDataObjectArray) {
+        for(let objct of data.expendDataObjectArray) {
+            // if(objct.type === typeArray[i]) {
+                
+            // }
+            console.log(objct);
+            console.log(objct.expend);
 
-            document.getElementById(`${typeArray[i]}`).textContent = data.expendDataObjectArray.type[key]
+            document.getElementById(`${typeArray[i]}`).textContent = objct.expend
             i++;
         }
         
         let expendArray = [];
         let count = 0;
-        for(let expend in data.expendDataObjectArray){
+        for(let expend of data.expendDataObjectArray){
             // console.log(data.expendType[expend]);
             expendArray.push(data.expendDataObjectArray[expend]);
             count++
@@ -261,16 +267,16 @@ function pieObjArray (objArray) {
 
 function randomColorFor(type) {
     const colorMap = {
-        "投資": "#3366CC",
-        "浪費": "#DC3912",
-        "日用品": "",
-        "外食": "",
-        "出前": "",
-        "本": "",
-        "教材": "",
-        "コンビニ": "",
-        "食品": "",
-        "その他": ""
+        "investment": "#3366CC",
+        "waste": "#DC3912",
+        "necessities": "#FF9900",
+        "eating_out": "109618",
+        "delivery": "#990099",
+        "book": "#0099C6",
+        "teaching_material": "#DD4477",
+        "convenience": "#66AA00",
+        "food": "#B82E2E",
+        "other": "#316395"
     };
 
     return colorMap[type];

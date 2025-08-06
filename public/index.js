@@ -116,6 +116,22 @@ function send (data) {  //ポート8001にデータを送信する
     .catch(err => console.log("送信エラー：",err));
 
 }
+//タイプごとの総額（今月）のためのオブジェクト　要らないかも？
+const monthTypeObjectExpend = {
+    "investment" : 0,
+    "waste" : 0,
+    "necessities" : 0,
+    "eating_out" : 0,
+    "delivery" : 0,
+    "book" : 0,
+    "teaching_material" : 0,
+    "convenience" : 0,
+    "food" : 0,
+    "other" : 0,
+};
+
+let typeArray = ["investment","waste","necessities","eating_out","delivery","book","teaching_material","food","other"];
+
 
 function receive () {//情報の受け取りと値の成型と貼り付け GAS側でやっていたデータの集計などをフロントでする
 
@@ -128,17 +144,17 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         // console.log("受け取りデータ：", data.expendDataObjArray);
 
         const now = new Date();
+        const sunday = new Date(now);
+        sunday.setDate(now.getDate() - now.getDay());//日曜日の日にちを計算
+        const saturday = new Date(now);
+        saturday.setDate(now.getDate() + (6-now.getDay()));//土曜日の日にちを計算
+
         let totalToday = 0, totalWeek = 0, totalMonth = 0;
         let hourlyExpend = 0, hourlyExpendMonty = 0;
-        const typeMap = {};
+        const typeMap = {};//タイプごとの総額を入れるオブジェクト
         const objArray = [];
 
         const dataObjArray = data.expendDataObjectArray;
-
-        // console.log("dataObjArray : ", dataObjArray);
-        // dataObjArray.forEach((item) => {
-        //     console.log(item);
-        // })
 
         dataObjArray.forEach(entry => {//dataの型{expendDataObjectArray:[a,b,c...]}
             console.log(entry);
@@ -146,30 +162,40 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
             const amount = Number(entry.expend || 0);
             const type = entry.type;
             
+            // タイプごとの金額を入れるオブジェクトを自動で作っているとGPT入っているが、うまく機能していないプロンプト
             if(!typeMap[type]) typeMap[type] = 0;
             typeMap[type] += amount;
-            objArray.push({ type, price: amount, color: randomColorFor(type)});
+
 
             if (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()) {
                 totalMonth += amount; //今月の集計
+
+                for(let typeObj in monthTypeObjectExpend) {//種別ごとの今月の合計
+                    if(type === typeObj) {
+                        monthTypeObjectExpend[typeObj] += amount;
+                    }
+                }
 
                 if(date.toDateString() === now.toDateString()) {
                     totalToday += amount; //今日の集計
                 }
 
                 //今週の集計
-                // const sunday = new Date().setDate();
-                // console.log(sunday);
+                if (sunday.getDate() < date.getDate() && date.getDate() <= saturday.getDate()) {
+                    totalWeek += amount;
+                }
             }
-            
+
         });
 
-        console.log(objArray);
+
+        console.log("obfArray : ", objArray);
+        console.log("monthTypeObjectExpend : ",monthTypeObjectExpend);
 
         //時給換算の計算
 
-        hourlyExpend = totalToday / 24;
-        hourlyExpendMonty = totalMonth / now.getDay() / 24;
+        hourlyExpend = Math.floor((totalToday / 24) * 100) / 100;
+        hourlyExpendMonty = Math.floor((totalMonth / now.getDay() / 24) * 100) / 100;
 
         document.getElementById("hourly_wage").textContent = hourlyExpend;
         document.getElementById("hourly_wage_month").textContent = hourlyExpendMonty;
@@ -178,18 +204,27 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         document.getElementById("month_expense").textContent = totalMonth;
         
         //テーブルに支出の値を記入する
-        let typeArray = ["investment","waste_expense","necessities","eating_out","delivery","book","teaching_material","convenience","food","other"];
         let i = 0;
-        for(let objct of data.expendDataObjectArray) {
-            // if(objct.type === typeArray[i]) {
-                
-            // }
-            console.log(objct);
-            console.log(objct.expend);
-
-            document.getElementById(`${typeArray[i]}`).textContent = objct.expend
+        for(let typeName in monthTypeObjectExpend) {
+            
+            console.log(typeName);
+            console.log(monthTypeObjectExpend[typeName]);
+            document.getElementById(`${typeName}`).textContent = monthTypeObjectExpend[typeName];
             i++;
+            
+        };
+
+        //グラフ用に色をそろえるなど、データを成型する
+
+        for(let typeName in monthTypeObjectExpend) {
+            objArray.push({
+                "type" : typeName,
+                "price" : monthTypeObjectExpend[typeName],
+                "color" : randomColorFor(typeName)
+            });
         }
+
+        console.log("objArray : ", objArray);
         
         let expendArray = [];
         let count = 0;
@@ -202,22 +237,30 @@ function receive () {//情報の受け取りと値の成型と貼り付け GAS�
         let newArray = [];
         let colorArray = [];
         for(let obj of data.expendDataObjectArray) {//色とタイプが固定するように配列を作る
-            console.log(obj);
+            // console.log(obj);
             colorArray.push(obj.color);
             newArray.push([obj.type,obj.price,obj.color]);
         }
-        console.log(colorArray);
-        console.log(newArray);
+        // console.log(colorArray);
+        // console.log(newArray);
         // pie(expendArray);
-        pieObjArray(data.expendDataObjectArray);
+        pieObjArray(objArray);
 
     })
     .catch(err => console.error("取得失敗：",err));
 }
 
 function pieObjArray (objArray) {
-    const filteredData = objArray.filter(obj => obj.price > 0);//priceがゼロのカテゴリーを排除
-    const sortedData = filteredData.sort((a,b) => b.price - a.price);
+    console.log("test")
+    console.log(objArray)
+    const filteredData = objArray.filter(obj => {
+        console.log(obj.price)
+        return obj.price > 0 ;//priceがゼロのカテゴリーを排除
+    });
+    console.log(filteredData);
+
+    const sortedData = filteredData.sort((a,b) => b.price - a.price);//データを値段の降順で並べ替える
+    console.log(sortedData);
 
     const total = sortedData.reduce((sum, obj) => sum + obj.price, 0);//reduce((累積地,要素) => 処理,初期値)　これで全体の合計値を算出する。
 

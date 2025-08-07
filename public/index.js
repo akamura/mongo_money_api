@@ -96,18 +96,18 @@ send_expend.addEventListener("click",(e)=>{
 
 //直近の収入をsendボタンを押したら取得する
 
-document.getElementById("send_income").addEventListener("click" ,(e) => {
-    const nowIncome = document.getElementById("now_income").value;
-    console.log(nowIncome);
-    incomeData = {
-        mode : "income",
-        income : nowIncome
-    }
-    console.log(incomeData);
-    send(incomeData).then(()=> {
-        receive();
-    });
-});
+// document.getElementById("send_income").addEventListener("click" ,(e) => {
+//     const nowIncome = document.getElementById("now_income").value;
+//     console.log(nowIncome);
+//     incomeData = {
+//         mode : "income",
+//         income : nowIncome
+//     }
+//     console.log(incomeData);
+//     send(incomeData).then(()=> {
+//         receive();
+//     });
+// });
 
 function send (data) {  //ポート8001にデータを送信する
     console.log(`関数send内のdata:${data}`)

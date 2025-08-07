@@ -58,6 +58,13 @@ console.log(day);
 console.log(justNow);
 console.log(justNow.getMonth());
 
+//ユーザーの設定
+let currentUser = "user_1"; //デフォルトユーザー
+
+document.getElementById("user_select").addEventListener("change", (e) => {
+    currentUser = e.target.value;
+    receive();
+});
 
 //送信ボタンを押すと直近の買い物の金額を取得
 const send_expend = document.getElementById("send_expenditure");
@@ -135,7 +142,7 @@ let typeArray = ["investment","waste","necessities","eating_out","delivery","boo
 
 function receive () {//情報の受け取りと値の成型と貼り付け GAS側でやっていたデータの集計などをフロントでする
 
-    fetch(`${BASE_URL}/relay`)//開けたポートのurlを代入する
+    fetch(`${BASE_URL}/relay?user=${currentUser}`)//開けたポートのurlを代入する
     .then(res => res.json())
     .then(data => {
         console.log("受け取りデータ：", data);

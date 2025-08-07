@@ -25,6 +25,7 @@ mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
 
 //スキーマとモデルの定義 ！！！ここで保存される形を定義している！！！
 const expenseSchema = new mongoose.Schema({
+    user : currentUser,
     date: {type: Date, default: Date.now },
     expend : Number,
     mode : String,
@@ -37,11 +38,12 @@ const Expense = mongoose.model("Expense", expenseSchema);
 //データ受け取り・保存
 app.post("/", async (req, res) => {
     try {
-        const { timeStamp, mode, expend, type, remark} = req.body;//type expendを分割代入
+        const { user,timeStamp, mode, expend, type, remark} = req.body;//type expendを分割代入
         // console.log(req);
         console.log(req.body);
         const newExpense = new Expense({
             // date,
+            user,
             mode,
             timeStamp,
             expend,
@@ -61,7 +63,10 @@ app.post("/", async (req, res) => {
 // データ取得
 app.get("/relay", async (req, res) => {
     try {
-        const expenses = await Expense.find().sort({date: -1}).limit(100);
+        const {user} = req.body;
+        const filter = user ? { user } : {};
+
+        const expenses = await Expense.find(filter).sort({date: -1}).limit(100);
         res.json({
             expendDataObjectArray: expenses
         });

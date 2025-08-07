@@ -82,6 +82,7 @@ send_expend.addEventListener("click",(e)=>{
 
     expendData = {
         timeStamp : justNow,
+        user : currentUser,
         mode : "expend",
         expend : now_expend,
         type : typeOfExpenditure,

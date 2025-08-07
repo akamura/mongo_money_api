@@ -40,7 +40,7 @@ app.post("/", async (req, res) => {
     try {
         const { user,timeStamp, mode, expend, type, remark} = req.body;//type expendを分割代入
         // console.log(req);
-        console.log(req.body);
+        console.log("req.body : " ,req.body);
         const newExpense = new Expense({
             // date,
             user,

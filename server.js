@@ -63,7 +63,7 @@ app.post("/", async (req, res) => {
 // データ取得
 app.get("/relay", async (req, res) => {
     try {
-        const {user} = req.body;
+        const {user} = req.query;
         const filter = user ? { user } : {};
 
         const expenses = await Expense.find(filter).sort({date: -1}).limit(100);

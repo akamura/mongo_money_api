@@ -25,7 +25,7 @@ mongoose.connect(mongoURL/*, { useNewUrlParser:true, useUnifiedTopology:true}*/)
 
 //スキーマとモデルの定義 ！！！ここで保存される形を定義している！！！
 const expenseSchema = new mongoose.Schema({
-    user : currentUser,
+    user : String,
     date: {type: Date, default: Date.now },
     expend : Number,
     mode : String,

@@ -143,6 +143,22 @@ let typeArray = ["investment","waste","necessities","eating_out","delivery","boo
 
 function receive () {//情報の受け取りと値の成型と貼り付け GAS側でやっていたデータの集計などをフロントでする
 
+    //表やグラフの値をリセットする
+    //月ごとのタイプ別支出をリセット
+    for (let key in monthTypeObjectExpend) {
+        monthTypeObjectExpend[key] = 0;
+    }
+
+    //表示をリセット
+    for (let typeName in monthTypeObjectExpend) {
+        const cell = document.getElementById(`${typeName}`)
+        if (cell) cell.textContent = "0";
+    }
+    
+    //canvasのグラフをクリア
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+
+
     fetch(`${BASE_URL}/relay?user=${currentUser}`)//開けたポートのurlを代入する
     .then(res => res.json())
     .then(data => {
